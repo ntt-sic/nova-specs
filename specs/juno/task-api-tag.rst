@@ -11,6 +11,7 @@ Add tag field to TaskAPI
 https://blueprints.launchpad.net/nova/+spec/tag-of-task-api
 
 This is a new feature of TaskAPI.
+
 With this specification, user can add tag to Nova API when user requests.
 Tag is string or UUID which user can specify.
 
@@ -21,6 +22,7 @@ Problem description
 ===================
 
 For end User, it is too hard to get task status without TaskAPI.
+
 Even if TasAPI is implemented in Nova, it is still difficult if user could
 not get response and instance-id or task-id from Nova.
 This may happen in network disconnecting or client hang up.
@@ -39,13 +41,13 @@ User use TaskAPI with tag and get tag-id and get requested API status.
 This tag feature is enable with any TaskAPI.
 User can set this tag as request header.
 
- #. First, user request Nova API with tag header.
- #. Something wrong happen such as down of client side or
-    network disconnection.
- #. User could not get task-id.
- #. So, user ask own request task status with TaskAPI using tag just now.
- #. Like http://<..>/v3/servers/<tag-id>/tasks.
- #. So user could get Task status directly.
+#. First, user request Nova API with tag header.
+#. Something wrong happen such as down of client side or
+   network disconnection.
+#. User could not get task-id.
+#. So, user ask own request task status with TaskAPI using tag just now.
+#. Like http://<..>/v3/servers/<tag-id>/tasks.
+#. So user could get Task status directly.
 
 Alternatives
 ------------
@@ -67,6 +69,7 @@ Data model impact
 -----------------
 
 About data, just add 'tag' column to TaskAPI table.
+
 If user doesn't specify any tag, NULL remains as default value.
 
 
@@ -81,51 +84,47 @@ I have to implement this added diff feature.
 
   * Add this header "-H "Task-tag: 49fe58f1-a658-4232-b723-8f0b3efc1014".
     Using this header is limited to API which is enable TaskAPI.
-
   * As same as TaskAPI, tag effects creating an instance or acting
     on an instance.
-
   * Basically, normal and error http response code(s) will not change.
-
   * Qyery for TaskAPI using tag
     http://<..>/v3/servers/<tag-id>/tasks
-
-    This returns result same as http://<..>/v3/servers/<server-id>/tasks
+  * This returns result same as http://<..>/v3/servers/<server-id>/tasks
     from TaskAPI.
-    And also response returns tag as header.
+  * And also response returns tag as header.
 
-    response header = {
+    ::
+
+     response header = { 
         'date': 'Thu, 22 May 2014 01:36:36 GMT',
         'content-length': '15',
         'content-type': 'application/json',
         'x-compute-request-id': 'req-3e26271a-c819-44af-bc37-a27863ffba5a',
-        'task-tag': '49fe58f1-a658-4232-b723-8f0b3efc1014'
-    }
+        'task-tag': '49fe58f1-a658-4232-b723-8f0b3efc1014'}
 
-    task = {
-        'type': 'object',
-        'properties': {
-            'uuid': { 'type': 'string', 'format': 'uuid' },
-            'task': { 'type': 'string' },
-            'state': { 'type': 'string' },
-            'resource': {
-                'type': 'object',
-                'patternProperties': {
-                    'server|image|network|volume': {
-                        'type': 'string',
-                        'format': 'uuid'
-                    }
-                }
-            },
-            'request_id': { 'type': 'string' },
-            'user_id': { 'type': 'string' },
-            'project_id': { 'type': 'string' },
-            'start_time': { 'type': 'string', 'format': 'date-time' },
-            'last_updated': { 'type': 'string', 'format': 'date-time' }
-        }
-        'additionalProperties': True
-    }
-
+      task = {
+          'type': 'object',
+          'properties': {
+              'uuid': { 'type': 'string', 'format': 'uuid' },
+              'task': { 'type': 'string' },
+              'state': { 'type': 'string' },
+              'resource': {
+                  'type': 'object',
+                  'patternProperties': {
+                      'server|image|network|volume': {
+                          'type': 'string',
+                          'format': 'uuid'
+                      }
+                  }
+              },
+              'request_id': { 'type': 'string' },
+              'user_id': { 'type': 'string' },
+              'project_id': { 'type': 'string' },
+              'start_time': { 'type': 'string', 'format': 'date-time' },
+              'last_updated': { 'type': 'string', 'format': 'date-time' }
+          }
+          'additionalProperties': True
+      }
 
 Security impact
 ---------------
@@ -155,6 +154,7 @@ Other deployer impact
 ---------------------
 
 If end user uses this feature, user set any string to tag.
+
 Second request of same tag, same request URL and same parameter,
 in this case, TaskAPI returns 'That request is already accepted'.
 
@@ -182,21 +182,18 @@ Other contributors:
 Work Items
 ----------
 
- * Add tag header to Nova request.
-
- * Add tag header to Nova response.
-
- * Add tag field to TaskAPI table.
-
- * Add DBAPI which can find task from tag.
-
- * Add API which can find task from tag.
+* Add tag header to Nova request.
+* Add tag header to Nova response.
+* Add tag field to TaskAPI table.
+* Add DBAPI which can find task from tag.
+* Add API which can find task from tag.
 
 
 Dependencies
 ============
 
 instance-tasks-api
+
 https://blueprints.launchpad.net/nova/+spec/instance-tasks-api
 
 
@@ -204,6 +201,7 @@ Testing
 =======
 
 I have no idea how to pass tag from client in tempest.
+
 And how to ensure that Nova returns(or doesn't return) Task objects.
 
 
