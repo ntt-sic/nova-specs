@@ -44,10 +44,10 @@ User can set this tag as request header.
 #. First, user request Nova API with tag header.
 #. Something wrong happen such as down of client side or
    network disconnection.
-#. User could not get task-id.
-#. So, user ask own request task status with TaskAPI using tag just now.
-#. Like http://<..>/v3/servers/<tag-id>/tasks.
-#. So user could get Task status directly.
+#. User could not get task_id.
+#. So user ask own instance_id from tag before using TaskAPI. 
+#. Now, user can ask own request task status with TaskAPI using instance_id and tag just now.
+#. Like http://<..>/v3/servers/<instance_id>/tasks/<tag>
 
 Alternatives
 ------------
