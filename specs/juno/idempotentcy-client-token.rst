@@ -10,7 +10,7 @@ Idempotency for OpenStack API
 
 https://blueprints.launchpad.net/nova/+spec/idempotentcy-client-token
 
-In this blueprint, I suggest ClientToken that user can specify, and post
+In this blueprint, I suggest ClientToken that users can specify, and post
 requests which idempotency is guaranteed by this ClientToken.
 
 
@@ -34,18 +34,15 @@ Problem description
 #. User thought booting was fauilure(even if it went well),
    so user booted a new server with same param as 1.
 
-* It looks no problems at first glance, but money problems may occur
-  with using OpenStack as a service.
-  (There is a possibility that the overage charges for two servers.)
+* For billing purpose, users need to create as many servers as they want.
+  But there is a possibility that the overage charges for two servers.
 
-* So user need to way how is his server, how is his server status.
+* So users need to way how is his server, how is his request.
   In this case, idempotency client token is so useful.
-  To specify the token itself by user, user can know status of server.
-  Even if how many times user requests POST method, it is guaranteed that
+  To specify the client token by users, users can track his request.
+  Even if how many times users requests POST method, it is guaranteed that
   the state of the POST request which was same with return of
   user's first POST request.
-
-* Now, I don't target this feature to Developer.
 
 * For a major reworking of something existing it would describe the
   problems in that feature that are being addressed.
@@ -68,7 +65,8 @@ now OpenStack returns GET response of instance.
 You can correctly know instance's status and don't happen to boot
 needless instance.
 
-* Here, I target this to any POST API in Nova.
+* Now, I target at CreateServer as first.
+* And I will implement this to any POST API in Nova in time.
 * In future, it is useful this specification is adopted to any POST API.
 
 Alternatives
@@ -144,7 +142,7 @@ None
 Other end user impact
 ---------------------
 
-If user don't specfiy this 'X-Client-Token', there is no effect to original
+If users don't specfiy this 'X-Client-Token', there is no effect to original
 POST request.
 
 In case of using python nova-client, need to modify it to
@@ -207,6 +205,7 @@ Dependencies
 One of Heat blueprint depend on this blueprint.
 
 * Support API retry function with Idempotency in creating/updating a stack
+
   https://blueprints.launchpad.net/heat/+spec/support-retry-with-idempotency
 
 
@@ -227,7 +226,7 @@ Documentation Impact
 There are some documentation impacts.
 
 First, new request parameter is added.
-User can use this if he wants.
+Users can use this if he wants.
 
 Second, response of POST request is differ from how many times request.
 
